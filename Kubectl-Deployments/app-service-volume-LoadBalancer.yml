@@ -1,0 +1,65 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: redis
+spec:  
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      volumes:
+       - name: persistent-storage
+         persistentVolumeClaim:
+          claimName: redis-pv-claim
+      containers:
+      - name: redis
+        image: redis
+        ports:
+        - containerPort: 6379
+          name: redis
+        volumeMounts:
+          - name: persistent-storage
+            mountPath: /data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  ports:
+  - port: 6379
+  selector:
+    app: redis
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: py-app
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: py-app
+    spec:       
+      containers:
+      - name: py-app
+        image: pbadhe34/my-apps:app1
+        ports:
+        - containerPort: 8090
+        env:
+          - name: redis
+            value: "redis"        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: py-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8090
+  selector:
+    app: py-app

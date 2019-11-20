@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: nodeport-service
+spec:
+  type: NodePort
+  ports:
+    - port: 8090
+      nodePort: 31000
+  selector:
+    user-app: py-app

@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: host-port-user
+spec:
+  volumes:
+    - name: mysql-storage
+      persistentVolumeClaim:
+       claimName: mysql-pv-claim
+  containers:
+    - name: host-port-container
+      image: pbadhe34/my-apps:user-service
+      ports:
+        - containerPort: 8090
+          hostPort: 8300
+      
+    - name: mysql-server
+      image: mysql:5.6
+      env:
+         - name: MYSQL_ROOT_PASSWORD
+           value: "MyRootPass123" 
+         - name: MYSQL_DATABASE
+           value: userservice
+      ports:
+        - containerPort: 3306
+          hostPort: 3306 
+      volumeMounts:
+        - name: mysql-storage
+          mountPath: /var/lib/mysql    

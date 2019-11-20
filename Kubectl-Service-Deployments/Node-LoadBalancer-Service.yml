@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: load-balancer-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8090       
+  selector:
+    user-app: py-app

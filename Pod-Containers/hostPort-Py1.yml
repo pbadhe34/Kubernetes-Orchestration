@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: host-port-pod
+spec:
+  containers:
+    - name: host-port-app
+      image: pbadhe34/my-apps:app1
+      ports:
+        - containerPort: 8090
+          hostPort: 8200

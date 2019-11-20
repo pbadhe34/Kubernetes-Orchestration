@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: user-service-pod-app
+spec:
+  volumes:
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName:  mysql-pv-claim
+  containers:
+    - name: user-service-app
+      image: pbadhe34/my-apps:user-app-pod
+      ports:
+        - containerPort: 8090          
+    - name: mysql-pod
+      image: mysql:5.6
+      ports:
+        - containerPort: 3306
+          name: mysql
+      env:
+         - name: MYSQL_ROOT_PASSWORD
+           value: "MyRootPass123" 
+         - name: MYSQL_DATABASE
+           value: userservice       
+      volumeMounts:
+          - name: persistent-storage
+            mountPath: /var/lib/mysql      

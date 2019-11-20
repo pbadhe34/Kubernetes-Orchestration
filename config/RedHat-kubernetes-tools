@@ -1,0 +1,82 @@
+
+Install Kubernetes tools
+
+ sudo su
+
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+
+# Set SELinux in permissive mode (effectively disabling it)
+ sudo setenforce 0
+  sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+
+  sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+
+  sudo systemctl enable --now kubelet
+
+  kubeadm version
+
+  kubectl version
+
+ sudo gedit /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+
+   sudo rm /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+
+
+  sudo apt-get install -y  kubeadm kubectl kubelet
+  sudo apt-get remove  kubelet kubeadm kubectl
+
+   sudo apt-get remove  kubelet
+
+   sudo systemctl daemon-reload 
+
+  sudo apt-get update && apt-get install -y kubeadm=1.16.1-00 && \
+  apt-mark hold kubeadm
+
+  sudo apt-get update && apt-get install -y kubectl=1.16.1-00 && \
+  apt-mark hold kubectl
+
+  sudo apt-get update && apt-get install -y kubelet=1.16.1-00 && \
+  apt-mark hold kubelet
+
+  sudo apt-get install -y kubeadm=1.16.1-00 kubelet=1.16.1-00 kubectl=1.16.1-00
+
+  sudo kubedam init
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+
+
+  kubectl cluster-info
+
+Tear down
+
+To undo what kubeadm did, you should first drain the node and make sure that the node is empty before shutting it down.
+
+Talking to the control-plane node with the appropriate credentials, run:
+
+kubectl drain knode --delete-local-data --force --ignore-daemonsets
+kubectl delete node knode
+
+Then, on the node being removed, reset all kubeadm installed state:
+
+kubeadm reset
+
+The reset process does not reset or clean up iptables rules or IPVS tables. If you wish to reset iptables, you must do so manually:
+
+iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
+
+If you want to reset the IPVS tables, you must run the following command:
+
+ipvsadm -C
+
+

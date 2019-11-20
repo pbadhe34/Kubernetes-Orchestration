@@ -1,0 +1,19 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: deployment-py-app
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: py-app
+    spec:       
+      containers:
+      - name: py-app-container
+        image: pbadhe34/my-apps:app1
+        ports:
+        - containerPort: 8090           
+        env:
+          - name: redis
+            value: "redis"        

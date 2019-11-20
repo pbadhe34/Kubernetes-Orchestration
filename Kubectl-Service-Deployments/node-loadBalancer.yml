@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: external-ip-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+  selector:
+    name: nodeport-pod

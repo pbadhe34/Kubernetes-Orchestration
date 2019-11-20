@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nodeport-pod
+  labels:
+    name: node-port-app
+spec:  
+  containers:
+    - name: node-port-container1
+      image: pbadhe34/my-apps:app1
+      ports:
+        - containerPort: 8090
+
+    - name: node-port-container2
+      image: pbadhe34/my-apps:app1
+      ports:
+        - containerPort: 8090

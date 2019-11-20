@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+    nginx:
+        image: my-nginx
+        ports:
+            - 8080:8080
+            - 9080:9080
+            - 9090:9090
+        restart: always
+
+    app:
+        depends_on:
+            - nginx
+        hostname: py-host
+        image: pbadhe34/my-apps:app1
+        restart: always
+
+    apache:
+        depends_on:
+            - nginx
+        image: httpd:alpine
+        restart: always

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: host-port-pod
+spec:
+  containers:
+    - name: host-port-app
+      image: magnuslarsson/quotes:go-22
+      ports:
+        - containerPort: 8080
+          hostPort: 9090

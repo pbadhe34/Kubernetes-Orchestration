@@ -1,0 +1,44 @@
+ 
+
+ sudo curl -d "@data.json"  -H "Content-Type: application/json" -X POST http://192.168.99.100:8300/user
+
+
+ sudo curl -d "@user.json"  -H "Content-Type: application/json" -X POST http://192.168.99.100:8300/user
+
+ sudo curl -X GET http://192.168.99.100:8300/users
+
+  POST application/x-www-form-urlencoded
+application/x-www-form-urlencoded is the default:
+
+curl -d "param1=value1&param2=value2" -X POST http://localhost:8090/user
+explicit:
+
+curl -d "param1=value1&param2=value2" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://localhost:3000/data
+with a data file
+
+curl -d "@data.txt" -X POST http://localhost:3000/data
+POST application/json
+curl -d '{"key1":"value1", "key2":"value2"}' -H "Content-Type: application/json" -X POST http://localhost:3000/data
+with a data file
+
+curl -d "@data.json" -X POST http://localhost:3000/data
+
+ data.json
+{
+  "key1":"value1",
+  "key2":"value2"
+}
+ data.txt
+param1=value1&param2=value2
+ package.json
+{
+  "name": "postdemo",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4"
+  }
+}
